@@ -1,8 +1,5 @@
 import cds from "@sap/cds";
 import { AzureOpenAiChatClient, AzureOpenAiEmbeddingClient } from "@sap-ai-sdk/langchain";
-/* import { AzureOpenAiEmbeddingClient } from "@sap-ai-sdk/langchain";
-import { AzureChatOpenAI as AzureOpenAiChatClient } from "@langchain/openai"; */
-import { AzureChatOpenAI } from "@langchain/openai";
 
 import { z } from "zod";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -502,7 +499,7 @@ export default class MailInsights extends cds.ApplicationService {
      * @return {Promise} - Returns a Promise that resolves to an array of embeddings.
      */
     private createEmbeddings = async (mails: Array<IBaseMail>): Promise<any> => {
-        const embed = getEmbeddingModel(this.resourceGroupId) as AzureOpenAiEmbeddingClient;
+        const embed = getEmbeddingModel(this.resourceGroupId);
         const embeddings = await Promise.all(
             mails.map(async (mail: IBaseMail) => {
                 const embeddings = await embed.embedDocuments([mail.body]);
@@ -687,12 +684,12 @@ export default class MailInsights extends cds.ApplicationService {
     };
 }
 
-const getChatModel = (resourceGroupId: string): AzureChatOpenAI => {
+const getChatModel = (resourceGroupId: string) => {
       return new AzureOpenAiChatClient({
         modelName: "gpt-4o",
         modelVersion: "latest",
         resourceGroup: resourceGroupId
-    }) as any;
+    });
 };
 
 const getEmbeddingModel = (resourceGroupId: string) => {
