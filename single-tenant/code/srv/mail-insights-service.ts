@@ -37,6 +37,13 @@ export default class MailInsights extends cds.ApplicationService {
 
         this.resourceGroupId = getAppName();
         checkOrPrepareDeployments(this.resourceGroupId);
+
+        // listen to all topics
+        const messaging = await cds.connect.to('messaging');
+        messaging.on('*', msg => {
+            console.info('EVENT!');
+            console.warn(msg.data);
+        })
     }
 
     /**
@@ -163,6 +170,14 @@ export default class MailInsights extends cds.ApplicationService {
             }).where({
                 ID: { in: mailBatch.map((mail: any) => mail.ID) }
             });
+
+            const messaging = await cds.connect.to('messaging');
+            await messaging.emit({
+                event: 'sap/btp/pbc/demo1',
+                data: mails,
+                headers: {'X-Correlation-ID': req.headers['X-Correlation-ID']}
+            })
+
 
             // Add default descriptions for actions
             insertedMails.forEach((mail: any) => {

@@ -11,6 +11,7 @@ build-parameters:
     - builder: custom
       commands:
         - npm run build
+        # - npm run build:fast
 
 modules:
   # --------------------- APPROUTER MODULE ---------------------
@@ -66,6 +67,7 @@ modules:
       - name: genai-mail-insights-html5-repo-runtime
       - name: genai-mail-insights-destination
       - name: generative-ai-hub
+      - name: btp-cap-genai-rag-messaging
       - name: genai-mail-insights-approuter
         parameters:
           config:
@@ -254,3 +256,12 @@ resources:
       service-name: ${space}-generative-ai-hub
       service-plan: extended
       service: aicore
+  # ------------------ EVENT MESH ---------------------
+  - name: btp-cap-genai-rag-messaging
+  #- name: is-em-message-client
+    # ------------------------------------------------------------
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: event-mesh-message-client
+      service-plan: message-client
+      path: ./event-mesh.json

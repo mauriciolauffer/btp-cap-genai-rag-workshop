@@ -1,0 +1,13 @@
+{
+  "emname": "btp-cap-genai-rag-emname",
+  "version": "1.1.0",
+  "namespace": "default/btp-cap-genai-rag/1",
+  "options": {
+    "management": true,
+    "messagingrest": true,
+    "messaging": true
+  },
+  "authorities": [
+    "$ACCEPT_GRANTED_AUTHORITIES"
+  ]
+}

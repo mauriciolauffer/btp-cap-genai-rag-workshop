@@ -12,6 +12,7 @@
     "build:ts": "tsc -p ../../code",
     "build:cds": "npm run build --prefix ../../code",
     "build:ui": "npm run build --prefix ../../code/app/ui/ && npm run copy --prefix ../../code/app/ui/",
+    "build:fast": "npm run build:fast --prefix ../../code",
     "cleanup:ts": "npx shx rm -r \"../../code/gen/**/*.{ts,tsconfig}\"",
     "---DEPLOY---": "",
     "build:mbt": "mbt build",
@@ -19,6 +20,6 @@
     "build:deploy": "npm run build:mbt && npm run deploy"
   },
   "engines": {
-      "node": ">=20"
+    "node": ">=20"
   }
 }
