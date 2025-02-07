@@ -1,8 +1,10 @@
 import cds from "@sap/cds";
 import { AzureOpenAiChatClient, AzureOpenAiEmbeddingClient } from "@sap-ai-sdk/langchain";
+/* import { AzureOpenAiEmbeddingClient } from "@sap-ai-sdk/langchain";
+import { AzureChatOpenAI as AzureOpenAiChatClient } from "@langchain/openai"; */
+import { AzureChatOpenAI } from "@langchain/openai";
 
 import { z } from "zod";
-import { v4 as uuidv4 } from "uuid";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import { OutputFixingParser } from "langchain/output_parsers";
@@ -282,7 +284,7 @@ export default class MailInsights extends cds.ApplicationService {
     private generateInsights = async (mails: Array<IBaseMail>, rag: boolean = false) => {
         // Add unique ID to mails if not existent
         mails.forEach((mail) => {
-            mail.ID ??= uuidv4();
+            mail.ID ??= crypto.randomUUID();
         });
 
         const [generalInsights, potentialResponses, languageMatches, embeddings] = await Promise.all([
@@ -500,7 +502,7 @@ export default class MailInsights extends cds.ApplicationService {
      * @return {Promise} - Returns a Promise that resolves to an array of embeddings.
      */
     private createEmbeddings = async (mails: Array<IBaseMail>): Promise<any> => {
-        const embed = getEmbeddingModel(this.resourceGroupId);
+        const embed = getEmbeddingModel(this.resourceGroupId) as AzureOpenAiEmbeddingClient;
         const embeddings = await Promise.all(
             mails.map(async (mail: IBaseMail) => {
                 const embeddings = await embed.embedDocuments([mail.body]);
@@ -685,12 +687,12 @@ export default class MailInsights extends cds.ApplicationService {
     };
 }
 
-const getChatModel = (resourceGroupId: string) => {
-    return new AzureOpenAiChatClient({
+const getChatModel = (resourceGroupId: string): AzureChatOpenAI => {
+      return new AzureOpenAiChatClient({
         modelName: "gpt-4o",
         modelVersion: "latest",
         resourceGroup: resourceGroupId
-    });
+    }) as any;
 };
 
 const getEmbeddingModel = (resourceGroupId: string) => {
