@@ -53,9 +53,9 @@
 		"deploy": "cf deploy mta_archives/genai-mail-insights_0.0.1.mtar --retries 1",
 		"undeploy": "cf undeploy genai-mail-insights --delete-services --delete-service-keys --delete-service-brokers",
 		"---KYMA---": "",
-		"kyma:dryrun":"cds build --for helm && helm install genai-mail-insights ./gen/chart -n demo-genai-mail-insights --dry-run > ./kyma/dry-run.yaml  --set-file xsuaa.jsonParameters=xs-security.json",
+		"kyma:dryrun":"cds build --for helm && helm install genai-mail-insights ./gen/chart -n demo-genai-mail-insights --dry-run > ./kyma/dry-run.yaml",
 		"kyma:pack": "ctz ./kyma/containerize.yaml --log --push",
-		"kyma:deploy": "cds build --for helm && helm upgrade --install genai-mail-insights ./gen/chart -n demo-genai-mail-insights  --set-file xsuaa.jsonParameters=xs-security.json",
+		"kyma:deploy": "cds build --for helm && helm upgrade --install genai-mail-insights ./gen/chart -n demo-genai-mail-insights --set-file xsuaa.jsonParameters=xs-security.json",
 		"kyma:undeploy": "helm uninstall genai-mail-insights -n demo-genai-mail-insights"
 	},
 	"prettier": {

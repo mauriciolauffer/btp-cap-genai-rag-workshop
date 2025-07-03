@@ -101,7 +101,7 @@ html5-apps-deployer:
     SAP_CLOUD_SERVICE: sap.demo.genai-mail-insights
   envFrom:
     - configMapRef:
-        name: "{{ .Release.Name }}-html5-apps-deployer-configmap"
+        name: genai-mail-insights-html5-apps-deployer-configmap
 
 # Destinations:
 
