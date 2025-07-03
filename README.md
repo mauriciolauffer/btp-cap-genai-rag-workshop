@@ -62,16 +62,15 @@ This sample scenario comes with a step-by-step tutorial for a deployment in your
 ### Deploy to Kyma
 
 1. Substitute `YOUR_REGISTRY` in `./chart/values.yaml` and `./kyma/containerize.yaml` with your Docker registry.
-2. Create a `namespace` in your Kyma cluster with the istio sidecar enabled.
+2. Create a `namespace` in your Kyma cluster with the name `demo-genai-mail-insights` and with the istio sidecar enabled.
 3. Create a secret with the name `docker-registry` containing the credentials of your Docker registry:
 
 ```bash
-kubectl create secret docker-registry docker-registry -n YOUR_NAMESPACE \
+kubectl create secret docker-registry docker-registry -n demo-genai-mail-insights \
     --docker-server=YOUR_REGISTRY \
     --docker-username=USERNAME \
     --docker-password=PASSWORD \
     --docker-email=EMAIL
-```
 4. Install the required tooling mentioned here: [Prerequisites for CAP on Kyma](https://cap.cloud.sap/docs/guides/deployment/to-kyma#prerequisites)
 5. Build, package and deploy the project:
 
