@@ -59,6 +59,28 @@ This sample scenario comes with a step-by-step tutorial for a deployment in your
 4. [Application Testing](./docs/tutorial/4-test/README.md)
 5. [Extend the solution](./docs/tutorial/5-extend/README.md)
 
+### Deploy to Kyma
+
+1. Substitute `YOUR_REGISTRY` in `./chart/values.yaml` and `./kyma/containerize.yaml` with your Docker registry.
+2. Create a `namespace` in your Kyma cluster with the istio sidecar enabled.
+3. Create a secret with the name `docker-registry` containing the credentials of your Docker registry:
+
+```bash
+kubectl create secret docker-registry docker-registry -n YOUR_NAMESPACE \
+    --docker-server=YOUR_REGISTRY \
+    --docker-username=USERNAME \
+    --docker-password=PASSWORD \
+    --docker-email=EMAIL
+```
+4. Install the required tooling mentioned here: [Prerequisites for CAP on Kyma](https://cap.cloud.sap/docs/guides/deployment/to-kyma#prerequisites)
+5. Build, package and deploy the project:
+
+```bash
+npm run kyma:pack
+npm run kyma:dryrun # optional, this will create the file ./kyma/dryrun.yaml to validate before deploying
+npm run kyma:deploy
+```
+
 ## How to obtain support
 
 [Create an issue](https://github.com/SAP-samples/btp-cap-genai-rag/issues) in this repository if you find a bug or have questions about the content.

@@ -1,0 +1,138 @@
+# yaml-language-server: $schema=./values.schema.json
+
+global:
+  imagePullSecret:
+    name: docker-registry
+  image:
+    registry: YOUR_REGISTRY
+    tag: latest
+
+# Modules:
+
+srv:
+  image:
+    repository: genai-mail-insights-srv
+  bindings:
+    db:
+      serviceInstanceName: hana
+    xsuaa:
+      serviceInstanceName: xsuaa
+    aicore:
+      serviceInstanceName: aicore
+  resources:
+    limits:
+      ephemeral-storage: 1G
+      cpu: 750m
+      memory: 512M
+    requests:
+      ephemeral-storage: 1G
+      cpu: 250m
+      memory: 256M
+  health:
+    liveness:
+      path: /health
+    readiness:
+      path: /health
+  expose:
+    enabled: false
+  networkSecurity:
+    enabled: true
+    allowNamespaceInternal: true
+
+router:
+  image:
+    repository: genai-mail-insights-router
+  bindings:
+    xsuaa:
+      serviceInstanceName: xsuaa
+    destination:
+      serviceInstanceName: destination
+    repo-runtime:
+      serviceInstanceName: repo-runtime
+  resources:
+    limits:
+      ephemeral-storage: 512M
+      cpu: 100m
+      memory: 256M
+    requests:
+      ephemeral-storage: 512M
+      cpu: 100m
+      memory: 256M
+  health:
+    liveness:
+      path: /healthz
+    readiness:
+      path: /healthz
+  expose:
+    enabled: true
+
+# Jobs:
+
+hana-deployer:
+  image:
+    repository: genai-mail-insights-db-deployer
+  bindings:
+    hana:
+      serviceInstanceName: hana
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256M
+    requests:
+      cpu: 250m
+      memory: 256M
+
+html5-apps-deployer:
+  image:
+    repository: genai-mail-insights-ui-deployer
+  bindings:
+    destination:
+      serviceInstanceName: destination
+    repo-host:
+      serviceInstanceName: repo-host
+  resources:
+    limits:
+      cpu: 500m
+      memory: 256M
+    requests:
+      cpu: 500m
+      memory: 256M
+  env:
+    SAP_CLOUD_SERVICE: sap.demo.genai-mail-insights
+  envFrom:
+    - configMapRef:
+        name: "{{ .Release.Name }}-html5-apps-deployer-configmap"
+
+# Destinations:
+
+backendDestinations:
+  genai-mail-insights-api:
+    service: srv
+
+# Resources:
+
+hana:
+  serviceOfferingName: hana
+  servicePlanName: hdi-shared
+
+xsuaa:
+  serviceOfferingName: xsuaa
+  servicePlanName: application
+
+destination:
+  serviceOfferingName: destination
+  servicePlanName: lite
+  parameters:
+    HTML5Runtime_enabled: true
+
+repo-host:
+  serviceOfferingName: html5-apps-repo
+  servicePlanName: app-host
+
+repo-runtime:
+  serviceOfferingName: html5-apps-repo
+  servicePlanName: app-runtime
+
+aicore:
+  serviceOfferingName: aicore
+  servicePlanName: extended

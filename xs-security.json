@@ -32,7 +32,7 @@
 		{
 			"name": "Token_Exchange",
 			"description": "UAA Token Exchange",
-			"scope-references": ["$uaa.user"],
+			"scope-references": ["uaa.user"],
 			"attribute-references": []
 		}
 	],
@@ -51,6 +51,7 @@
 	"oauth2-configuration": {
 		"token-validity": 900,
 		"redirect-uris": [
+			"https://*.k8s-hana.ondemand.com/**",
 			"https://*.hana.ondemand.com/**",
 			"https://*.applicationstudio.cloud.sap/**",
 			"http*://*.cfapps.*.hana.ondemand.com/**",
