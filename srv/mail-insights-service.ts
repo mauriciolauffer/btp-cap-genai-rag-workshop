@@ -382,6 +382,7 @@ export default class MailInsights extends cds.ApplicationService {
 		// parser
 		const parser = StructuredOutputParser.fromZodSchema(schemas.MAIL_INSIGHTS_SCHEMA);
 		const formatInstructions = parser.getFormatInstructions();
+		//@ts-ignore
 		const parserWithFix = OutputFixingParser.fromLLM(llm, parser);
 
 		// prompt template
@@ -393,6 +394,7 @@ export default class MailInsights extends cds.ApplicationService {
 			["user", "{subject}\n{body}"]
 		]).partial({ formatInstructions });
 		// chain together template, client, and parser
+		//@ts-ignore
 		const llmChain = promptTemplate.pipe(llm).pipe(parserWithFix);
 
 		const mailsInsights = await Promise.all(
@@ -428,6 +430,7 @@ export default class MailInsights extends cds.ApplicationService {
 		// parser
 		const parser = StructuredOutputParser.fromZodSchema(schemas.MAIL_RESPONSE_SCHEMA);
 		const formatInstructions = parser.getFormatInstructions();
+		//@ts-ignore
 		const parserWithFix = OutputFixingParser.fromLLM(llm, parser);
 		const ragSystemPrompt = `Context information based on similar mail responses is given below. 
                                     Context:{context}
@@ -448,6 +451,7 @@ export default class MailInsights extends cds.ApplicationService {
 		]).partial({ formatInstructions });
 
 		// chain together template, client, and parser
+		//@ts-ignore
 		const llmChain = promptTemplate.pipe(llm).pipe(parserWithFix);
 
 		const potentialResponses = await Promise.all(
@@ -483,6 +487,7 @@ export default class MailInsights extends cds.ApplicationService {
 		// parser
 		const parser = StructuredOutputParser.fromZodSchema(schemas.MAIL_LANGUAGE_SCHEMA);
 		const formatInstructions = parser.getFormatInstructions();
+		//@ts-ignore
 		const parserWithFix = OutputFixingParser.fromLLM(llm, parser);
 
 		// prompt template
@@ -494,6 +499,7 @@ export default class MailInsights extends cds.ApplicationService {
 			["user", "{mail}"]
 		]).partial({ formatInstructions });
 		// chain together template, client, and parser
+		//@ts-ignore
 		const llmChain = promptTemplate.pipe(llm).pipe(parserWithFix);
 
 		const languageMatches = await Promise.all(
@@ -539,6 +545,7 @@ export default class MailInsights extends cds.ApplicationService {
 		// parser
 		const parser = StructuredOutputParser.fromZodSchema(schemas.MAIL_INSIGHTS_TRANSLATION_SCHEMA);
 		const formatInstructions = parser.getFormatInstructions();
+		//@ts-ignore
 		const parserWithFix = OutputFixingParser.fromLLM(llm, parser);
 
 		// prompt template
@@ -550,6 +557,7 @@ export default class MailInsights extends cds.ApplicationService {
 			["user", "{insights}"]
 		]).partial({ formatInstructions });
 		// chain together template, client, and parser
+		//@ts-ignore
 		const llmChain = promptTemplate.pipe(llm).pipe(parserWithFix);
 
 		const translations = await Promise.all(
@@ -608,6 +616,7 @@ export default class MailInsights extends cds.ApplicationService {
 			// parser
 			const parser = StructuredOutputParser.fromZodSchema(schemas.MAIL_INSIGHTS_TRANSLATION_SCHEMA);
 			const formatInstructions = parser.getFormatInstructions();
+		//@ts-ignore
 			const parserWithFix = OutputFixingParser.fromLLM(llm, parser);
 
 			// prompt template
@@ -621,6 +630,7 @@ export default class MailInsights extends cds.ApplicationService {
 				["user", "{response}"]
 			]).partial({ formatInstructions });
 			// chain together template, client, and parser
+		//@ts-ignore
 			const llmChain = promptTemplate.pipe(llm).pipe(parserWithFix);
 			// invoke the chain
 			const translation: z.infer<typeof schemas.MAIL_RESPONSE_TRANSLATION_SCHEMA> = await llmChain.invoke({

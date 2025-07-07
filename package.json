@@ -8,10 +8,10 @@
 	"type": "module",
 	"dependencies": {
 		"@cap-js/hana": "^1.6.1",
-		"@langchain/community": "^0.3.30",
-		"@langchain/core": "0.3.36",
-		"@sap-ai-sdk/ai-api": "^1.7.0",
-		"@sap-ai-sdk/langchain": "1.7.0",
+		"@langchain/community": "^0.3.47",
+		"@langchain/core": "^0.3.58",
+		"@sap-ai-sdk/ai-api": "^1.15.0",
+		"@sap-ai-sdk/langchain": "^1.15.0",
 		"@sap-cloud-sdk/connectivity": "^3.26.0",
 		"@sap-cloud-sdk/http-client": "^3.26.0",
 		"@sap-cloud-sdk/openapi": "^3.26.0",
@@ -51,7 +51,12 @@
 		"---DEPLOY---": "",
 		"build:mbt": "mbt build",
 		"deploy": "cf deploy mta_archives/genai-mail-insights_0.0.1.mtar --retries 1",
-		"undeploy": "cf undeploy genai-mail-insights --delete-services --delete-service-keys --delete-service-brokers"
+		"undeploy": "cf undeploy genai-mail-insights --delete-services --delete-service-keys --delete-service-brokers",
+		"---KYMA---": "",
+		"kyma:dryrun":"cds build --for helm && helm install genai-mail-insights ./gen/chart -n demo-genai-mail-insights --dry-run > ./kyma/dry-run.yaml",
+		"kyma:pack": "ctz ./kyma/containerize.yaml --log --push",
+		"kyma:deploy": "cds build --for helm && helm upgrade --install genai-mail-insights ./gen/chart -n demo-genai-mail-insights --set-file xsuaa.jsonParameters=xs-security.json",
+		"kyma:undeploy": "helm uninstall genai-mail-insights -n demo-genai-mail-insights"
 	},
 	"prettier": {
 		"singleQuote": false,

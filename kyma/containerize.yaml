@@ -1,0 +1,30 @@
+_schema-version: "1.0"
+repository: YOUR_REGISTRY
+tag: latest
+before-all:
+  - mbt build
+
+modules:
+  - name: genai-mail-insights-router
+    build-parameters:
+      dockerfile: kyma/router.Dockerfile
+
+  - name: genai-mail-insights-srv
+    build-parameters:
+      buildpack:
+        buildpack: paketo-buildpacks/nodejs
+        builder: builder-jammy-base
+        path: gen/srv
+        env:
+          BP_NODE_RUN_SCRIPTS: "" # keep to prevent paketo to run the build script again
+          
+  - name: genai-mail-insights-db-deployer
+    build-parameters:
+      buildpack:
+        buildpack: paketo-buildpacks/nodejs
+        builder: builder-jammy-base
+        path: gen/db
+
+  - name: genai-mail-insights-ui-deployer
+    build-parameters:
+      dockerfile: kyma/ui-deployer.Dockerfile
